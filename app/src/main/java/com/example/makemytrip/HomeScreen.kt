@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -20,22 +21,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ModalDrawer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Business
+import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.AirlineSeatReclineNormal
+import androidx.compose.material.icons.outlined.ArrowCircleRight
+import androidx.compose.material.icons.outlined.ArrowUpward
+import androidx.compose.material.icons.outlined.CardGiftcard
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.LocalOffer
+import androidx.compose.material.icons.outlined.Money
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
@@ -49,8 +62,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,7 +73,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -74,24 +90,37 @@ import androidx.compose.ui.res.painterResource as painterResource
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    var isDrawerOpen by remember { mutableStateOf(false) }
+    val drawerState = rememberDrawerState(androidx.compose.material.DrawerValue.Closed)
 
-    Scaffold (
-        topBar = { TopAppBarContent()},
-        bottomBar = {BottomNavigationBar(navController = navController )}
-    ){padding ->
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(padding)
-        ) {
-            HomeScreenElem()
+    LaunchedEffect(isDrawerOpen) {
+        if (isDrawerOpen) {
+            drawerState.open()
+        } else {
+            drawerState.close()
         }
     }
 
-
-
+    ModalDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            NavigationDrawerContent()
+        }
+    ) {
+        Scaffold(
+            topBar = { TopAppBarContent(onMenuClick = { isDrawerOpen = !isDrawerOpen }) },
+            bottomBar = { BottomNavigationBar(navController = navController) }
+        ) { padding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(padding)
+            ) {
+                HomeScreenElem()
+            }
+        }
+    }
 }
 
 
@@ -210,66 +239,6 @@ fun HomeScreenElem() {
 
 }
 
-//Composable function for Top Nav bar
-
-
-@Preview
-@Composable
-fun TopNavigationBar() {
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-
-    NavigationBar(modifier = Modifier.height(100.dp)) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(
-                modifier = Modifier.wrapContentSize(Alignment.CenterStart)
-            ) {
-                IconButton(onClick = {  scope.launch { drawerState.open() } }) {
-                    Icon(
-                        imageVector = Icons.Filled.Menu,
-                        contentDescription = "Menu",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-//            Image(
-//                bitmap = imageResource(id = R.drawable.logo),
-//                contentDescription = "Logo",
-//                modifier = Modifier.size(40.dp)
-//            )
-            }
-            Row(
-                modifier = Modifier.wrapContentSize(Alignment.CenterEnd)
-            ) {
-                IconButton(onClick = { /* search */ }) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Search",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "My Cash",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "My Biz",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            }
-        }
-    }
-
-}
 
 //Composable function for Bottom menu bar
 
@@ -549,53 +518,183 @@ fun PreviewExpandableCard() {
 }
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarContent() {
-    TopAppBar(
-        title = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row( modifier = Modifier.wrapContentSize(Alignment.CenterStart)) {
-                    IconButton(onClick = { /* navigate back */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Menu"
-                        )
+fun TopAppBarContent(onMenuClick: () -> Unit) {
+    Box() {
+        Column {
+            // Top App Bar
+            TopAppBar(
+                title = {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            modifier = Modifier.wrapContentSize(Alignment.CenterStart),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(onClick = onMenuClick) {
+                                Icon(
+                                    imageVector = Icons.Filled.Menu,
+                                    contentDescription = "Menu"
+                                )
+                            }
+                            Image(
+                                painter = painterResource(id = R.drawable.makemytriplog),
+                                contentDescription = "Logo",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Row(modifier = Modifier.wrapContentSize(Alignment.CenterEnd)) {
+                            IconButton(onClick = { /* search */ }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Search,
+                                    contentDescription = "Search"
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            IconButton(onClick = { /* cash */ }) {
+                                Icon(
+                                    imageVector = Icons.Filled.AttachMoney,
+                                    contentDescription = "Cash"
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            IconButton(onClick = { /* biz */ }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Business,
+                                    contentDescription = "Biz"
+                                )
+                            }
+                        }
                     }
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                Row( modifier = Modifier.wrapContentSize(Alignment.CenterEnd)) {
-                    IconButton(onClick = { /* search */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = "Search"
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    IconButton(onClick = { /* cash */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.AttachMoney,
-                            contentDescription = "Cash"
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    IconButton(onClick = { /* biz */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Business,
-                            contentDescription = "Biz"
-                        )
-                    }
-                }
-            }
-        },
-        //elevation = CardDefaults.cardElevation(defaultElevation = 4.dp) // Adjust elevation as needed
-    )
+                },
+                //elevation = CardDefaults.cardElevation(defaultElevation = 4.dp) // Adjust elevation as needed
+            )
+        }
+    }
+}
 
+//Sidenavbar
+@Composable
+fun NavigationDrawerContent() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp)
+    ) {
+        HeaderSection()
+        Spacer(modifier = Modifier.height(16.dp))
+        NavigationRow("My Account", R.drawable.baseline_train_24)
+        NavigationRow("Support", R.drawable.icons8home100)
+        NavigationRow("Notifications", R.drawable.icons8home100)
+        Spacer(modifier = Modifier.height(16.dp))
+        SectionCard(
+            title = "My Trips",
+            items = listOf(
+                "View/Manage Trips" to R.drawable.baseline_currency,
+                "Wishlist" to R.drawable.baseline_fence_24
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        SectionCard(
+            title = "Rewards",
+            items = listOf(
+                "Gift Cards" to R.drawable.baseline_temple_buddhist_24,
+                "Rewards" to R.drawable.baseline_fence_24,
+                "Refer & Earn" to R.drawable.icons1,
+                "Holidays Refer & Earn" to R.drawable.baseline_flight_takeoff_24
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        NavigationRow("MMTBLACK", R.drawable.baseline_flight_takeoff_24)
+        Spacer(modifier = Modifier.height(16.dp))
+        SectionCard(
+            title = "Settings",
+            items = listOf(
+                "Language English" to R.drawable.baseline_directions_car_24,
+                "Country" to R.drawable.baseline_temple_buddhist_24
+            )
+        )
+    }
+}
+
+@Composable
+fun HeaderSection() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color.Blue, Color.Cyan),
+                    startY = 0f,
+                    endY = 1000f
+                ),
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(16.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .background(Color.Gray, shape = CircleShape)
+            ) {
+                // Profile Image Placeholder
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(text = "Hi Traveller", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        }
+    }
+}
+
+@Composable
+fun SectionCard(title: String, items: List<Pair<String, Int>>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFF6F6F6), shape = RoundedCornerShape(8.dp))
+            .padding(16.dp)
+    ) {
+        Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Gray)
+        Spacer(modifier = Modifier.height(8.dp))
+        items.forEach { item ->
+            NavigationRow(item.first, item.second)
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+}
+
+@Composable
+fun NavigationRow(title: String, iconRes: Int) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = title,
+            tint = Color.Unspecified,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(text = title, fontSize = 16.sp)
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(
+            imageVector = Icons.Outlined.ArrowCircleRight,
+            contentDescription = "Arrow",
+            tint = Color.Gray,
+            modifier = Modifier.size(24.dp)
+        )
+    }
 }
 
 @Composable
@@ -610,7 +709,7 @@ fun CardWithBackgroundAndImage( backgroundResId: Int, title: String) {
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         shape = RoundedCornerShape(16.dp)
     ) {
-        BoxWithConstraints(
+        Box(
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
@@ -683,7 +782,7 @@ fun CardWithWelcomeOffer( backgroundResId: Int, title: String,offer:String) {
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         shape = RoundedCornerShape(16.dp)
     ) {
-        BoxWithConstraints(
+        Box(
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
@@ -762,3 +861,6 @@ fun DiscoverMoreThanTravel() {
         }
     }
 }
+
+
+
