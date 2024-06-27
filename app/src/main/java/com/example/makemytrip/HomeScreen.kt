@@ -117,7 +117,7 @@ fun HomeScreen(navController: NavHostController) {
                     .verticalScroll(rememberScrollState())
                     .padding(padding)
             ) {
-                HomeScreenElem()
+                HomeScreenElem(navController = navController)
             }
         }
     }
@@ -125,7 +125,7 @@ fun HomeScreen(navController: NavHostController) {
 
 
 @Composable
-fun HomeScreenElem() {
+fun HomeScreenElem(navController: NavHostController) {
 
     Surface(modifier = Modifier
         .fillMaxHeight(),
@@ -229,7 +229,7 @@ fun HomeScreenElem() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            ExpandableCard()
+            ExpandableCard(navController = navController)
             PreviewCardWithBackgroundAndImage()
             PreviewCardWithWelcomeOffer()
 
@@ -300,221 +300,6 @@ fun BottomNavigationBar(navController: NavHostController) {
             }
         }
     }
-}
-
-//Composable function for Expandable card
-@Composable
-fun ExpandableCard() {
-    var expanded by remember { mutableStateOf(false) }
-
-    Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Header
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-//                horizontalArrangement = Arrangement.SpaceBetween
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column(verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_directions_car_24),
-                            contentDescription = "Icon 5"
-                        )
-                        Text(text = "Airport Cabs",
-                            fontSize = 12.sp)
-                    }
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_temple_buddhist_24),
-                            contentDescription = "Icon 6"
-                        )
-                        Text(text = "HomeStays\n&Villa",
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 19.9.sp)
-                    }
-                    Column (verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally)
-                    {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_directions_car_24),
-                            contentDescription = "Icon 7"
-                        )
-                        Text(text = "Outstation\nCabs",
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 19.9.sp)
-                    }
-                    Column (verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ){
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_currency),
-                            contentDescription = "Icon 8"
-                        )
-                        Text(text = "ForexCard\nCurrency",
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 19.9.sp)
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-                //Second line item start for Giftcards, Hourly Stays, Nearby Staycation,
-                // Travel Insurance
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column(verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_directions_car_24),
-                            contentDescription = "Icon 5"
-                        )
-                        Text(text = "Gift Cards",
-                            fontSize = 12.sp)
-                    }
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_temple_buddhist_24),
-                            contentDescription = "Icon 6"
-                        )
-                        Text(text = "Hourly stays",
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 9.9.sp)
-                    }
-                    Column (verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally)
-                    {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_directions_car_24),
-                            contentDescription = "Icon 7"
-                        )
-                        Text(text = "Nearby\nStaycation",
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 9.9.sp)
-                    }
-                    Column (verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ){
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_currency),
-                            contentDescription = "Icon 8"
-                        )
-                        Text(text = "Travel\nInsurance",
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 9.9.sp)
-                    }
-                }
-
-            }
-        }
-        // Content
-        if (expanded) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column(verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_flight_takeoff_24),
-                            contentDescription = "Icon 5"
-                        )
-                        Text(text = "Flight Status",
-                            fontSize = 12.sp)
-                    }
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_flight_takeoff_24),
-                            contentDescription = "Icon 6"
-                        )
-                        Text(text = "PNR Status",
-                            fontSize = 12.sp)
-                    }
-                    Column (verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally)
-                    {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_flight_takeoff_24),
-                            contentDescription = "Icon 7"
-                        )
-                        Text(text = "Visa",
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 9.9.sp)
-                    }
-                    Column (verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                        ){
-
-                    }
-                }
-
-            }
-        }
-        IconButton(onClick = { expanded =!expanded }) {
-            Icon(
-                imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                contentDescription = "Expand/Collapse",
-                )
-        }
-
-    }
-
-
-}
-
-@Preview
-@Composable
-fun PreviewExpandableCard() {
-    ExpandableCard()
 }
 
 
@@ -695,6 +480,233 @@ fun NavigationRow(title: String, iconRes: Int) {
             modifier = Modifier.size(24.dp)
         )
     }
+}
+
+
+//Offers
+
+//Composable function for Expandable card
+@Composable
+fun ExpandableCard(navController: NavHostController) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Header
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_directions_car_24),
+                            contentDescription = "Icon 5"
+                        )
+                        Text(text = "Airport Cabs",
+                            fontSize = 12.sp)
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        IconButton(onClick = { navController.navigate("Home_Stays_Villa") }) {
+
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_temple_buddhist_24),
+                                contentDescription = "Icon 5"
+                            )
+                        }
+                        Text(text = "HomeStays\n&Villa",
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 19.9.sp)
+                    }
+                    Column (verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally)
+                    {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_directions_car_24),
+                                contentDescription = "Icon 7"
+                            )
+                        }
+                        Text(text = "Outstation\nCabs",
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 19.9.sp)
+                    }
+                    Column (verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_currency),
+                                contentDescription = "Icon 8"
+                            )
+                        }
+                        Text(text = "ForexCard\nCurrency",
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 19.9.sp)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                //Second line item start for Giftcards, Hourly Stays, Nearby Staycation,
+                // Travel Insurance
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_directions_car_24),
+                                contentDescription = "Icon 5"
+                            )
+                        }
+                        Text(text = "Gift Cards",
+                            fontSize = 12.sp)
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_temple_buddhist_24),
+                                contentDescription = "Icon 6"
+                            )
+                        }
+                        Text(text = "Hourly stays",
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 9.9.sp)
+                    }
+                    Column (verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally)
+                    {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_directions_car_24),
+                                contentDescription = "Icon 7"
+                            )
+                        }
+                        Text(text = "Nearby\nStaycation",
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 9.9.sp)
+                    }
+                    Column (verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                       IconButton(onClick = { /*TODO*/ }) {
+                           Icon(
+                               painter = painterResource(id = R.drawable.baseline_currency),
+                               contentDescription = "Icon 8"
+                           )
+                       }
+                        Text(text = "Travel\nInsurance",
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 9.9.sp)
+                    }
+                }
+
+            }
+        }
+        // Content
+        if (expanded) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_flight_takeoff_24),
+                            contentDescription = "Icon 5"
+                        )
+                        Text(text = "Flight Status",
+                            fontSize = 12.sp)
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_flight_takeoff_24),
+                            contentDescription = "Icon 6"
+                        )
+                        Text(text = "PNR Status",
+                            fontSize = 12.sp)
+                    }
+                    Column (verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally)
+                    {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_flight_takeoff_24),
+                            contentDescription = "Icon 7"
+                        )
+                        Text(text = "Visa",
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 9.9.sp)
+                    }
+                    Column (verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                        ){
+
+                    }
+                }
+
+            }
+        }
+        IconButton(onClick = { expanded =!expanded }) {
+            Icon(
+                imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                contentDescription = "Expand/Collapse",
+                )
+        }
+
+    }
+
+
 }
 
 @Composable
